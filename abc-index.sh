@@ -44,13 +44,14 @@ for file; do
 	echo "%%newpage"
     fi
     while read line; do
-	case "$line"
+	case "$line" in
 	X:*)
 	    echo "X: $index"
 	    index=$(($index+1))
 	    ;;
 	*)
 	    echo "$line"
+	    ;;
 	esac
     done <$file
     echo ""			# blank line separates tunes
