@@ -1,0 +1,27 @@
+%
+% ABC template --semi-documented information fields as a sample header.
+%
+% Remarks:
+% The header comprises the set of directives up to the first blank line.
+% Each tune must have a unique 'X' (index) field, and should have a title.
+% The tune header ends at the 'K' (key) field, and the tune body starts
+% immediately after.
+% 
+X: 1				% Index
+T: title
+%A: Author(s)
+%B: Book Reference(s)
+%C: Composer(s)
+%D: discography(ies)
+%F: file URL
+%G: Group(s) (e.g. flute, fiddle, concertina, ...)
+%H: History(ies)
+%N: Notes
+%R: Rhythm (e.g. Hornpipe, reel, slipjig, ...)
+%S: Source(s) (e.g. heard in a pub ...)
+%W: Word(s) (e.g. extra lyrics)
+%Z: Transcriber
+M: 4/4				% measure
+L: 1/8				% default note length
+Q: 1/4=110 "Moderato"		% Tempo
+K: C major			% key signature (must be last!)
