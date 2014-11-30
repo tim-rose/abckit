@@ -2,42 +2,35 @@
 # ABC.MK --Rules for working with ABC files.
 #
 # Contents:
-# build:    --c-specific customisations for the "build" target.
-# %pdf:     --Build a printable document from an abc file.
-# %-8va:    --Shift by octaves
-# %-Db.abc: --Transposition rules.
+# pre-build: --Ensure that the "ABC_SRC" macro is defined.
+# %pdf:      --Build a printable document from an abc file.
+# %-8va:     --Shift the key of a tune by an entire octave.
+# %-Db.abc:  --Transposition rules.
+# src-abc:   --Define the "ABC_SRC" macro.
 #
 #
-# build: --c-specific customisations for the "build" target.
+# pre-build: --Ensure that the "ABC_SRC" macro is defined.
 #
-
 pre-build:	src-var-defined[ABC_SRC]
 
-# 
+#
 # %pdf: --Build a printable document from an abc file.
 #
 %.pdf: %.abc
 	abcm2ps $(ABC_FLAGS) -O $*.ps $*.abc
 	pstopdf $*.ps && rm $*.ps
+
 #
-# %-8va: --Shift by octaves
+# %-8va: --Shift the key of a tune by an entire octave.
 #
 %+8va.abc: %.abc;	  abc2abc $*.abc -rbt +12 > $@
 %-8va.abc: %.abc;	  abc2abc $*.abc -rbt -12 > $@
 
 #
-# %-jc.abc --Jazz-chord ligatures (if you have the right font)
+# %-jc.abc --Apply Jazz-chord ligatures (assumes you have the right font).
 #
 %-jc.abc: %.abc
 	sed -f abc-jazzchord <$*.abc >$@
-
-clean:	clean-abc
-clean-abc:
-	$(RM) $(ABC_SRC:.abc=.pdf) $(ABC_SRC:.abc=.ps)
-	$(RM) $(ABC_SRC:.abc=-[ABCDEFG][.-]*)  $(ABC_SRC:.abc=-[ABCDEFG][+b][.-].*) 
-	$(RM) $(ABC_SRC:.abc=[-+]8va.*)
-
-src:	;	mk-filelist -n ABC_SRC *.abc
 
 #
 # %-Db.abc: --Transposition rules.
@@ -58,3 +51,17 @@ src:	;	mk-filelist -n ABC_SRC *.abc
 %-Bb.abc:	%.abc; abc-transpose -T Bb $*.abc > $@
 %-B.abc:	%.abc; abc-transpose -T B $*.abc > $@
 
+#
+# clean-abc: Remove PDF and PostScript files.
+#
+clean:	clean-abc
+clean-abc:
+	$(RM) $(ABC_SRC:.abc=.pdf) $(ABC_SRC:.abc=.ps)
+	$(RM) $(ABC_SRC:.abc=*-[ABCDEFG][+b]*[-.]*)
+	$(RM) $(ABC_SRC:.abc=[-+]8va.*)
+
+#
+# src-abc: --Define the "ABC_SRC" macro.
+#
+src:	src-abc
+src-abc:	;	mk-filelist -n ABC_SRC *.abc
